@@ -4,6 +4,7 @@
 
 - [Introudction](#introudction)
 - [Requirements](#requirements)
+- [Input](#input)
 - [Tutorial](#tutorial)
 
 <!-- /MarkdownTOC -->
@@ -18,11 +19,73 @@ The tutorial relies on `radiantkit v0.0.1.20210618.1`. The recommended installat
 
 `pipx install git+https://github.com/ggirelli/radiantkit.git@v0.0.1.20210618.1 --force`
 
+## Input
+
+Create a folder for the tutorial.
+
+```bash
+mkdir $HOME/yfish-tutorial
+cd $HOME/yfish-tutorial
+```
+
+Starting data are available for download at [this link](http://bicroserver-2.scilifelab.se:5000/sharing/J2vF8UBhc) (accessible only from within SciLifeLab network). Place the downloaded nd2 file in the tutorial folder.
+
 ## Tutorial
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+1. Convert `nd2` file to `tiff` images.
+
+```bash
+cd $HOME/yfish-tutorial
+radiant nd2_to_tiff iTK286_040519_001.nd2
+```
+
+2. Identify any out of focus fields of view.
+
+```bash
+cd $HOME/yfish-tutorial/iTK286_040519_001
+radiant tiff_findoof . --threads 5 --rename --inreg '^dapi.*\.tiff$'
+```
+
+The script automatically renames all DNA staining channels (`dapi` in this tutorial) that are out-of-focus by adding the `.old` suffix. The user needs to add the same suffix *manually* to the corresponding fields in other channels.
+
+```bash
+mv cy5_005.tiff cy5_005.tiff.old
+mv cy5_009.tiff cy5_009.tiff.old
+mv cy5_011.tiff cy5_011.tiff.old
+mv cy5_019.tiff cy5_019.tiff.old
+```
+
+3. Segment the DNA staining to identify nuclei.
+
+```bash
+cd $HOME/yfish-tutorial/iTK286_040519_001
+radiant tiff_segment . --TCZYX --threads 5 --inreg "^dapi.*\.tiff$" -y
+```
+
+4. Measure nuclei.
+
+```bash
+cd $HOME/yfish-tutorial/iTK286_040519_001
+radiant measure_objects . dapi --threads 5 -y
+```
+
+5. Select G1 nuclei.
+
+```bash
+cd $HOME/yfish-tutorial/iTK286_040519_001
+radiant select_nuclei --k-sigma 2 --threads 5 . dapi -y
+```
+
+6. Build radial profiles.
+
+```bash
+cd $HOME/yfish-tutorial/iTK286_040519_001
+radiant radial_population --aspect 200 130 130 --mask-suffix mask_selected --threads 5 . dapi -y
+```
+
+7. Generate html report.
+
+```bash
+cd $HOME/yfish-tutorial
+radiant report .
+```
