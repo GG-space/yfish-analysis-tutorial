@@ -2,14 +2,14 @@
 
 <!-- MarkdownTOC -->
 
-- [Introudction](#introudction)
+- [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Input](#input)
 - [Tutorial](#tutorial)
 
 <!-- /MarkdownTOC -->
 
-## Introudction
+## Introduction
 
 Originally analyzed with the Python package `pygpseq` ([here](https://github.com/ggirelli/pygpseq)), nowadays we process YFISH images using the package `radiankit` ([here](https://github.com/ggirelli/radiantkit), still under development).
 
