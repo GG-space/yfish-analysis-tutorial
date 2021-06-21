@@ -84,6 +84,8 @@ cd $HOME/yfish-tutorial/iTK286_040519_001
 radiant radial_population --aspect 200 130 130 --mask-suffix mask_selected --threads 5 . dapi -y
 ```
 
+*NOTE. The radial profile building step might take several minutes to complete.*
+
 7. Generate html report.
 
 ```bash
