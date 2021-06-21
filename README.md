@@ -90,3 +90,5 @@ radiant radial_population --aspect 200 130 130 --mask-suffix mask_selected --thr
 cd $HOME/yfish-tutorial
 radiant report .
 ```
+
+Finally, inspect the generated html report with your favorite browser.
