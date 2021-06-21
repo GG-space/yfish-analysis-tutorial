@@ -74,6 +74,7 @@ radiant measure_objects . dapi --threads 5 -y
 ```bash
 cd $HOME/yfish-tutorial/iTK286_040519_001
 radiant select_nuclei --k-sigma 2 --threads 5 . dapi -y
+rm *mask.tiff # remove original masks
 ```
 
 6. Build radial profiles.
